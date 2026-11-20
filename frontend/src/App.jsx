@@ -3,13 +3,7 @@ import RutaProtegida from './auth/RutaProtegida';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Vehiculos from './pages/Vehiculos';
-import Conductores from './pages/Conductores';
-import Barrios from './pages/Barrios';
-import Rutas from './pages/Rutas';
-import RutaEditor from './pages/RutaEditor';
-import Turnos from './pages/Turnos';
-import Programacion from './pages/Programacion';
+import EnConstruccion from './pages/EnConstruccion';
 
 function NoEncontrado() {
   return (
@@ -29,14 +23,10 @@ export default function App() {
       <Route element={<RutaProtegida />}>
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/vehiculos" element={<Vehiculos />} />
-          <Route path="/conductores" element={<Conductores />} />
-          <Route path="/barrios" element={<Barrios />} />
-          <Route path="/rutas" element={<Rutas />} />
-          <Route path="/rutas/nueva" element={<RutaEditor />} />
-          <Route path="/rutas/:id" element={<RutaEditor />} />
-          <Route path="/turnos" element={<Turnos />} />
-          <Route path="/programacion" element={<Programacion />} />
+          <Route path="/vehiculos" element={<EnConstruccion titulo="Vehículos" />} />
+          <Route path="/conductores" element={<EnConstruccion titulo="Conductores" />} />
+          <Route path="/rutas" element={<EnConstruccion titulo="Rutas" />} />
+          <Route path="/programacion" element={<EnConstruccion titulo="Programación" />} />
           <Route path="*" element={<NoEncontrado />} />
         </Route>
       </Route>

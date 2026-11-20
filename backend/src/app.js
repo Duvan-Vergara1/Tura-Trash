@@ -7,7 +7,6 @@ const { comprobarConexion } = require('./db');
 const { requiereAutenticacion, requiereRol } = require('./middleware/auth');
 const { manejarErrores, rutaNoEncontrada } = require('./middleware/errores');
 const dashboard = require('./services/dashboard.service');
-const { rutasTurnos, rutasProgramaciones, rutasServicios } = require('./routes/programacion.routes');
 
 const app = express();
 
@@ -49,13 +48,6 @@ admin.use(requiereAutenticacion, requiereRol('ADMIN'));
 admin.get('/dashboard', async (req, res) => {
   res.json(await dashboard.resumen(req.usuario));
 });
-admin.use('/vehiculos', require('./routes/vehiculos.routes'));
-admin.use('/conductores', require('./routes/conductores.routes'));
-admin.use('/barrios', require('./routes/barrios.routes'));
-admin.use('/rutas', require('./routes/rutas.routes'));
-admin.use('/turnos', rutasTurnos);
-admin.use('/programaciones', rutasProgramaciones);
-admin.use('/servicios', rutasServicios);
 
 app.use('/api', admin);
 
