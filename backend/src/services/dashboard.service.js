@@ -1,8 +1,7 @@
-// Indicadores del panel. Todo se calcula en el momento con datos reales de la
-// base de datos: si cambian los datos, cambian los números.
+// Entrega 2: módulos + indicadores de vehículos y conductores, calculados
+// en el momento con datos reales: si cambian los datos, cambian los números.
 const { db } = require('../db');
 const { hoy } = require('../utils/fechas');
-const servicios = require('./servicios.service');
 
 const MODULOS = [
   { clave: 'vehiculos', nombre: 'Vehículos', ruta: '/vehiculos', descripcion: 'Flota, estados operativos y disponibilidad.' },
@@ -12,7 +11,7 @@ const MODULOS = [
 ];
 
 async function indicadores() {
-  const [vehiculos, conductores, rutas, programacion] = await Promise.all([
+  const [vehiculos, conductores] = await Promise.all([
     db('vehiculos')
       .first(
         db.raw('count(*) AS total'),
@@ -32,37 +31,12 @@ async function indicadores() {
         db.raw(`count(*) FILTER (WHERE estado <> 'INACTIVO'
                 AND licencia_vencimiento BETWEEN CURRENT_DATE AND CURRENT_DATE + 30) AS licencias_por_vencer`),
       ),
-    db('rutas as r')
-      .first(
-        db.raw('count(*) AS total'),
-        db.raw("count(*) FILTER (WHERE r.estado = 'ACTIVA') AS activas"),
-        db.raw("count(*) FILTER (WHERE r.estado = 'SUSPENDIDA') AS suspendidas"),
-        db.raw('count(*) FILTER (WHERE (SELECT count(*) FROM ruta_puntos p WHERE p.ruta_id = r.id) < 2) AS sin_trazado'),
-      ),
-    db('programaciones')
-      .where('estado', 'ACTIVA')
-      .where((w) => w.whereNull('fecha_fin').orWhere('fecha_fin', '>=', db.raw('CURRENT_DATE')))
-      .first(db.raw('count(*) AS activas'), db.raw('count(DISTINCT ruta_id) AS rutas_programadas')),
   ]);
-
-  return { vehiculos, conductores, rutas, programacion };
+  return { vehiculos, conductores };
 }
 
 async function resumen(usuario) {
-  const fecha = hoy();
-  const [datos, delDia] = await Promise.all([indicadores(), servicios.listar({ fecha })]);
-  const porEstado = { PROGRAMADO: 0, EN_CURSO: 0, COMPLETADO: 0, NO_REALIZADO: 0 };
-  for (const s of delDia.datos) porEstado[s.estado] += 1;
-
-  return {
-    usuario,
-    fecha,
-    modulos: MODULOS,
-    indicadores: {
-      ...datos,
-      servicios_hoy: { total: delDia.total, ...porEstado, con_alertas: delDia.datos.filter((s) => s.alertas.length).length },
-    },
-  };
+  return { usuario, fecha: hoy(), modulos: MODULOS, indicadores: await indicadores() };
 }
 
 module.exports = { resumen, indicadores, MODULOS };

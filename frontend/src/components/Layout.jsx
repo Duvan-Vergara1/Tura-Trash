@@ -6,9 +6,7 @@ const ENLACES = [
   { a: '/dashboard', texto: 'Panel', icono: '▦' },
   { a: '/vehiculos', texto: 'Vehículos', icono: '🚛' },
   { a: '/conductores', texto: 'Conductores', icono: '👷' },
-  { a: '/barrios', texto: 'Barrios', icono: '🏘' },
   { a: '/rutas', texto: 'Rutas', icono: '🗺' },
-  { a: '/turnos', texto: 'Turnos', icono: '🕒' },
   { a: '/programacion', texto: 'Programación', icono: '📅' },
 ];
 
