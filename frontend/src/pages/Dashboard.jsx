@@ -54,6 +54,16 @@ export default function Dashboard() {
           <Indicador titulo="Licencias vencidas" valor={i.conductores.licencias_vencidas} tono={i.conductores.licencias_vencidas ? 'peligro' : undefined} />
           <Indicador titulo="Vencen en 30 días" valor={i.conductores.licencias_por_vencer} tono={i.conductores.licencias_por_vencer ? 'alerta' : undefined} />
         </div>
+
+        <h2 className="grupo-indicadores__titulo">Rutas</h2>
+        <div className="indicadores">
+          <Indicador titulo="Rutas" valor={i.rutas.total} detalle={`${i.rutas.sin_trazado} sin trazado`} />
+          <Indicador titulo="Rutas activas" valor={i.rutas.activas} tono="ok" />
+          <Indicador titulo="Rutas suspendidas" valor={i.rutas.suspendidas} tono={i.rutas.suspendidas ? 'peligro' : undefined} />
+        </div>
+        <p>
+          <Link to="/rutas" className="boton boton--claro">Ir al módulo de rutas</Link>
+        </p>
       </section>
     </>
   );

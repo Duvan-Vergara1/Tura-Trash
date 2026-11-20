@@ -6,6 +6,9 @@ import Dashboard from './pages/Dashboard';
 import EnConstruccion from './pages/EnConstruccion';
 import Vehiculos from './pages/Vehiculos';
 import Conductores from './pages/Conductores';
+import Barrios from './pages/Barrios';
+import Rutas from './pages/Rutas';
+import RutaEditor from './pages/RutaEditor';
 
 function NoEncontrado() {
   return (
@@ -27,7 +30,10 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/vehiculos" element={<Vehiculos />} />
           <Route path="/conductores" element={<Conductores />} />
-          <Route path="/rutas" element={<EnConstruccion titulo="Rutas" />} />
+          <Route path="/barrios" element={<Barrios />} />
+          <Route path="/rutas" element={<Rutas />} />
+          <Route path="/rutas/nueva" element={<RutaEditor />} />
+          <Route path="/rutas/:id" element={<RutaEditor />} />
           <Route path="/programacion" element={<EnConstruccion titulo="Programación" />} />
           <Route path="*" element={<NoEncontrado />} />
         </Route>

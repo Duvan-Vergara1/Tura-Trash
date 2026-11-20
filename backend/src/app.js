@@ -50,6 +50,8 @@ admin.get('/dashboard', async (req, res) => {
 });
 admin.use('/vehiculos', require('./routes/vehiculos.routes'));
 admin.use('/conductores', require('./routes/conductores.routes'));
+admin.use('/barrios', require('./routes/barrios.routes'));
+admin.use('/rutas', require('./routes/rutas.routes'));
 
 app.use('/api', admin);
 

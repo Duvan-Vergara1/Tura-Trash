@@ -1,4 +1,4 @@
-// Entrega 2: módulos + indicadores de vehículos y conductores, calculados
+// Entrega 3: módulos + indicadores de vehículos, conductores y rutas, calculados
 // en el momento con datos reales: si cambian los datos, cambian los números.
 const { db } = require('../db');
 const { hoy } = require('../utils/fechas');
@@ -11,7 +11,7 @@ const MODULOS = [
 ];
 
 async function indicadores() {
-  const [vehiculos, conductores] = await Promise.all([
+  const [vehiculos, conductores, rutas] = await Promise.all([
     db('vehiculos')
       .first(
         db.raw('count(*) AS total'),
@@ -31,8 +31,15 @@ async function indicadores() {
         db.raw(`count(*) FILTER (WHERE estado <> 'INACTIVO'
                 AND licencia_vencimiento BETWEEN CURRENT_DATE AND CURRENT_DATE + 30) AS licencias_por_vencer`),
       ),
+    db('rutas as r')
+      .first(
+        db.raw('count(*) AS total'),
+        db.raw("count(*) FILTER (WHERE r.estado = 'ACTIVA') AS activas"),
+        db.raw("count(*) FILTER (WHERE r.estado = 'SUSPENDIDA') AS suspendidas"),
+        db.raw('count(*) FILTER (WHERE (SELECT count(*) FROM ruta_puntos p WHERE p.ruta_id = r.id) < 2) AS sin_trazado'),
+      ),
   ]);
-  return { vehiculos, conductores };
+  return { vehiculos, conductores, rutas };
 }
 
 async function resumen(usuario) {
